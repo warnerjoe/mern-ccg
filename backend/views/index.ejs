@@ -1,18 +1,18 @@
 <!-- index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>Raw Dill site</title>
-  </head>
+</head>
 
-  <body>
+<body>
     <h1>This is Rampage baby!</h1>
 
     <form action="/cards" method="POST">
-      <input type="text" placeholder="name" name="name" />
-      <input type="text" placeholder="quote" name="quote" />
-      <button type="submit">Submit</button>
+        <input type="text" placeholder="name" name="name" />
+        <input type="text" placeholder="quote" name="quote" />
+        <button type="submit">Submit</button>
     </form>
 
     <h2>The Cards</h2>
@@ -25,5 +25,14 @@
         </li>
         <% }); %>
     </ul>
-  </body>
+
+    <div>
+        <h2>Darth Vader invades!</h2>
+        <p>Replace first Yoda's quote with a quote written by Darth Vader</p>
+        <button id="update-button">Replace Yoda's quote</button>
+    </div>
+
+    <script src="/main.js"></script>
+    
+</body>
 </html>

@@ -18,6 +18,8 @@ app.set('view engine', 'ejs')
 app.use(requestLogger);
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
+app.use(express.static('public'))
 
 // Unknown endpoint handler - from TUT1
 const unknownEndpoint = (req, res) => {
@@ -33,26 +35,47 @@ MongoClient.connect(process.env.MONGO_DB_URI)
 
         // When localhost:3001/ is requested, respond with the index html.
         app.get('/', (req, res) => {
-            db.collection('maneuvers')
-                .find()
-                .toArray()
-                .then(results => {
-                    res.render('index.ejs', { cards: results});
-                })
-                .catch(
-                    error => console.error(error)
-                );
-        })
+        db.collection('maneuvers')
+            .find()
+            .toArray()
+            .then(results => {
+                res.render('index.ejs', { cards: results});
+            })
+            .catch(
+                error => console.error(error)
+            );
+        });
 
         app.post('/cards', (req, res) => {
-            cardCollection.insertOne(req.body).then(result => {
+        cardCollection
+            .insertOne(req.body)
+            .then(result => {
                 console.log(result);
                 res.redirect('/');
             })
-            .catch(error => console.error(error));
+            .catch(
+                error => console.error(error)
+            );
+        });
+
+        app.put('/cards', (req, res) => {
+            cardCollection
+                .findOneAndUpdate(
+                    { name: 'test' },
+                    {$set: {
+                        name: req.body.name,
+                        quote: req.body.quote,
+                    },},
+                    {upsert: true,}
+                ).then(result => {
+                    console.log(result)
+                })
+                .catch(
+                    error => console.error(error)
+                )
         })
 
-        app.use(unknownEndpoint)
+        app.use(unknownEndpoint);
 
         // RUN THE SERVER ON PORT = 3001
         const PORT = 3000;
@@ -60,5 +83,6 @@ MongoClient.connect(process.env.MONGO_DB_URI)
         app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
         })
-    })
-    .catch(error => console.error(error))
+    }).catch(
+        error => console.error(error)
+    );
