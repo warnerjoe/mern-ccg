@@ -20,14 +20,26 @@ let notes = [
     }
 ]
 
-// When localhost
+// When localhost:3001/ is requested, respond with a hello world message.
 app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
+    response.send('<h1>Hello World!</h1>');
 })
 
-// Respond with notes JSON when the proper route is requested.
+// When localhost:3001/api/notes is requested, respond with the notes array in JSON format.
 app.get('/api/notes', (request, response) => {
-    response.json(notes)
+    response.json(notes);
+})
+
+// When localhost:3001/api/notes/1 is requested, respond with the note with id 1.
+app.get('/api/notes/:id', (request, response) => {
+    const id = request.params.id;
+    const note = notes.find(note => String(note.id) === id);
+
+    if (note) {
+        response.json(note);
+    } else {
+        response.status(404).end();
+    }
 })
 
 // RUN THE SERVER ON PORT = 3001
