@@ -14,6 +14,7 @@ const requestLogger = (req, res, next) => {
     next();
 }
 
+app.set('view engine', 'ejs')
 app.use(requestLogger);
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,25 +25,40 @@ const unknownEndpoint = (req, res) => {
 }
 
 // Connect to MongoDB
-MongoClient.connect(process.env.MONGO_DB_URI, (error, client) => {
-    console.log('yo it worked');   
-})
+MongoClient.connect(process.env.MONGO_DB_URI)
+    .then(client => {
+        console.log('Connected to Database');
+        const db = client.db('raw-deal-cards');
+        const cardCollection = db.collection('maneuvers');
 
-// When localhost:3001/ is requested, respond with the index html.
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-})
+        // When localhost:3001/ is requested, respond with the index html.
+        app.get('/', (req, res) => {
+            db.collection('maneuvers')
+                .find()
+                .toArray()
+                .then(results => {
+                    res.render('index.ejs', { cards: results});
+                })
+                .catch(
+                    error => console.error(error)
+                );
+        })
 
-// When localhost:3001/quotes is requested, respond with the log
-app.post('/quotes', (req, res) => {
-    console.log(req.body)
-})
+        app.post('/cards', (req, res) => {
+            cardCollection.insertOne(req.body).then(result => {
+                console.log(result);
+                res.redirect('/');
+            })
+            .catch(error => console.error(error));
+        })
 
-app.use(unknownEndpoint)
+        app.use(unknownEndpoint)
 
-// RUN THE SERVER ON PORT = 3001
-const PORT = 3001;
+        // RUN THE SERVER ON PORT = 3001
+        const PORT = 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-})
+        app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+        })
+    })
+    .catch(error => console.error(error))
