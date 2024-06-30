@@ -68,12 +68,24 @@ MongoClient.connect(process.env.MONGO_DB_URI)
                     },},
                     {upsert: true,}
                 ).then(result => {
-                    console.log(result)
+                    res.json('Success');
                 })
                 .catch(
                     error => console.error(error)
                 )
         })
+
+        app.delete('/cards', (req, res) => {
+            cardCollection
+              .deleteOne(/* ... */)
+              .then(result => {
+                if (result.deletedCount === 0) {
+                  return res.json('No quote to delete')
+                }
+                res.json(`Deleted Darth Vader's quote`)
+              })
+              .catch(error => console.error(error))
+          })
 
         app.use(unknownEndpoint);
 
