@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const MongoClient = require('mongodb').MongoClient;
 const app = express();
+
+require('dotenv').config()
 
 // Request logger - prints request info to console
 const requestLogger = (req, res, next) => {
@@ -19,6 +22,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const unknownEndpoint = (req, res) => {
     res.status(404).send({ error: 'unknown endpoint' });
 }
+
+// Connect to MongoDB
+MongoClient.connect(process.env.MONGO_DB_URI, (error, client) => {
+    console.log('yo it worked');   
+})
 
 // When localhost:3001/ is requested, respond with the index html.
 app.get('/', (req, res) => {
