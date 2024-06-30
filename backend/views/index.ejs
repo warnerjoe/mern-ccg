@@ -7,7 +7,7 @@
   </head>
 
   <body>
-    <h1>May Node and Express be with you.</h1>
+    <h1>This is Rampage baby!</h1>
 
     <form action="/cards" method="POST">
       <input type="text" placeholder="name" name="name" />
@@ -15,6 +15,15 @@
       <button type="submit">Submit</button>
     </form>
 
-    <%= cards %>
+    <h2>The Cards</h2>
+
+    <ul class="cards">
+        <% cards.forEach(function(card) { %>
+        <li class="card">
+            <span><%= card.name %></span>
+            <span><%= card.quote %></span>
+        </li>
+        <% }); %>
+    </ul>
   </body>
 </html>
