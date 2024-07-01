@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 const app = express();
 
 require('dotenv').config()
@@ -93,7 +94,7 @@ MongoClient.connect(process.env.MONGO_DB_URI)
         const PORT = 3000;
 
         app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+            console.log(`Server running on port ${PORT}`);
         })
     }).catch(
         error => console.error(error)
