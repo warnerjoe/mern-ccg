@@ -21,7 +21,8 @@ const cardSchema = new mongoose.Schema({
     },
     subType: [{
         type: String,
-        enum: ['Heel', 'Face', 'Set-Up']
+        enum: ['Heel', 'Face', 'Set-Up'],
+        default: []
     }],
     rarity: {
         type: String,

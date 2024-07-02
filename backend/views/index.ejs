@@ -4,34 +4,7 @@
 
     <ul class="cards">
         <% cards.forEach(function(card) { %>
-        <li class="card">
-            <p><%= card.name %> 
-                <% if (card.superstarLogo.length - 1 > -1) { %>
-                    (<%= card.superstarLogo %> EXCLUSIVE)
-                <% } %>
-            </p>
-        <p>
-                <%= card.cardType.map((type) => {
-                    if (type === 'Maneuver') {
-                        return card.maneuverType;
-                    } else if (type === 'Reversal') {
-                        return 'Reversal: ' + card.reversalType;
-                    } else {
-                        return type;
-                    }
-                }).join(' / ') %>
-            </p>
-            
-            <span>F: <%= card.fortitude %></span> / 
-            
-            <span>D: <%= card.damage %> <%= card.stunValue > 0 ? `(${card.stunValue} SV)` : '' %></span>
-
-            
-            <p><%= card.cardText%></p>
-            <p><i><%= card.flavorText%></i></p>
-            
-            <p><%= String(card.collectorNumber).padStart(3, '0') + " - " + card.setName + " - " + card.rarity %></p>
-        </li>
+            <%- include('partials/card', { card: card }) %>
         <% }); %>
     </ul>
 
