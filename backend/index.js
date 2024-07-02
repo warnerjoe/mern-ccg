@@ -27,6 +27,7 @@ const unknownEndpoint = (req, res) => {
     res.status(404).send({ error: 'unknown endpoint' });
 };
 
+
 // Routes
 app.get('/', (req, res) => {
     Card.find()
@@ -72,7 +73,7 @@ app.delete('/cards', (req, res) => {
 app.use(unknownEndpoint);
 
 // Connect to MongoDB and start the server
-mongoose.connect(process.env.MONGO_DB_URI, {})
+mongoose.connect(process.env.MONGO_DB_URI, { dbName: 'raw-deal-app'})
     .then(() => {
         console.log('Connected to Database');
 
