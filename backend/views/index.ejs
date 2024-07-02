@@ -36,8 +36,12 @@
     <ul class="cards">
         <% cards.forEach(function(card) { %>
         <li class="card">
-            <p><%= card.name %></p>
-            <p>
+            <p><%= card.name %> 
+                <% if (card.superstarLogo.length - 1 > -1) { %>
+                    (<%= card.superstarLogo %> EXCLUSIVE)
+                <% } %>
+            </p>
+        <p>
                 <%= card.cardType.map((type) => {
                     if (type === 'Maneuver') {
                         return card.maneuverType;
@@ -49,15 +53,15 @@
                 }).join(' / ') %>
             </p>
             
-            <span>Fortitude:<%= card.fortitude %></span> / 
+            <span>F: <%= card.fortitude %></span> / 
             
-            <span>Damage: <%= card.damage %> <%= card.stunValue > 0 ? `(${card.stunValue} SV)` : '' %></span>
+            <span>D: <%= card.damage %> <%= card.stunValue > 0 ? `(${card.stunValue} SV)` : '' %></span>
 
             
             <p><%= card.cardText%></p>
             <p><i><%= card.flavorText%></i></p>
             
-            <p><%= String(card.collectorNumber).padStart(3, '0') + " " + card.setName %></p>
+            <p><%= String(card.collectorNumber).padStart(3, '0') + " - " + card.setName + " - " + card.rarity %></p>
         </li>
         <% }); %>
     </ul>
@@ -67,4 +71,4 @@
     <script src="/main.js"></script>
     
 </body>
-</html>i 
+</html>

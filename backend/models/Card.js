@@ -40,6 +40,10 @@ const cardSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    unique: {
+        type: Boolean,
+        default: false
+    },
     superstarValue: {
         type: Number,
         default: 0
@@ -48,6 +52,9 @@ const cardSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    superstarLogo: [{
+        type: String,
+    }],
     tagTeam: {
         type: Boolean,
         default: false
