@@ -1,6 +1,6 @@
 // src/Card.js
 import React from 'react';
-// import cardImage from './path_to_your_image.png';
+// my import cardImage from './path_to_your_image.png';
 
 const Card = () => {
   return (
