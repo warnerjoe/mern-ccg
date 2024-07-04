@@ -76,7 +76,7 @@ mongoose.connect(process.env.MONGO_DB_URI, { dbName: 'raw-deal-app'})
     .then(() => {
         console.log('Connected to Database');
 
-        const PORT = 3000;
+        const PORT = 5000;
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
