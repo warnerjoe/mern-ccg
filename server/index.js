@@ -1,12 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const app = express();
 const Card = require('./models/Card');
 
 require('dotenv').config();
 
-// Request logger - prints request info to console
+// Request logger - prints request info to console -- only for dev purposes
 const requestLogger = (req, res, next) => {
     console.log('Method:', req.method);
     console.log('Path:  ', req.path);
@@ -22,12 +23,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// Unknown endpoint handler - from TUT1
-const unknownEndpoint = (req, res) => {
-    res.status(404).send({ error: 'unknown endpoint' });
-};
+// Enable CORS for all routes
+app.use(cors());
 
 // Routes
+// / - GET - RENDERS ALL CARDS TO EJS VIEW
 app.get('/', (req, res) => {
     Card.find()
         .then(results => {
@@ -36,6 +36,19 @@ app.get('/', (req, res) => {
         .catch(error => console.error(error));
 });
 
+// /api/cards - GET - RETURNS ALL CARDS AS JSON
+app.get('/api/cards', (req, res) => {
+    Card.find()
+        .then(results => {
+            res.json(results);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
+});
+
+// /cards - POST - ADDS A NEW CARD
 app.post('/cards', (req, res) => {
     const card = new Card(req.body);
     card.save()
@@ -46,6 +59,7 @@ app.post('/cards', (req, res) => {
         .catch(error => console.error(error));
 });
 
+// /cards - PUT - UPDATES A CARD
 app.put('/cards', (req, res) => {
     Card.findOneAndUpdate(
         { name: 'test' },
@@ -58,25 +72,24 @@ app.put('/cards', (req, res) => {
     .catch(error => console.error(error));
 });
 
+// /cards - DELETE - DELETES A CARD
 app.delete('/cards', (req, res) => {
     Card.deleteOne({ name: req.body.name })
         .then(result => {
             if (result.deletedCount === 0) {
-                return res.json('No quote to delete');
+                return res.json('No card to delete');
             }
-            res.json(`Deleted ${req.body.name}'s quote`);
+            res.json(`Deleted ${req.body.name}'s card`);
         })
         .catch(error => console.error(error));
 });
 
-app.use(unknownEndpoint);
-
 // Connect to MongoDB and start the server
-mongoose.connect(process.env.MONGO_DB_URI, { dbName: 'raw-deal-app'})
+mongoose.connect(process.env.MONGO_DB_URI, { dbName: 'raw-deal-app' })
     .then(() => {
         console.log('Connected to Database');
 
-        const PORT = 5000;
+        const PORT = process.env.PORT || 5000;
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
