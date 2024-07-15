@@ -1,2 +1,2 @@
 # mern-ccg
-An online card game built using the MERN stack
+An card game database built using the MERN stack
